@@ -2,21 +2,9 @@
 
 ## 0. Abstract
 
-The Progressive Hedging Algorithm (PHA) is a new method which may be applied to multiperiod optimization problems under uncertainty. 
+The Progressive Hedging Algorithm (PHA) is a new method which may be applied to multiperiod optimization problems under uncertainty. It was first presented in Rockafellar and Wets (1991). In their paper no examples are given and the main emphasize is on the proofs and convergence analysis. Therefore, in order to understand the idea behind scenario analysis and PHA very simple numerical examples are given in this paper and the results are compared to results derived from classical stochastic  optimization methods. 
 
-渐进对冲算法是一种用于含有不确定性多周期优化问题的新方法.
-
-It was first presented in Rockafellar and Wets (1991). 
-
-与1991年由Rockafellar 和 Wets 首次提出.
-
-In their paper no examples are given and the main emphasize is on the proofs and convergence analysis. 
-
-在Rockafellar 和 Wets的论文中主要重点放在证明和收敛性分析上, 并没有给出具体的例子.
-
-Therefore, in order to understand the idea behind scenario analysis and PHA very simple numerical examples are given in this paper and the results are compared to results derived from classical stochastic  optimization methods. 
-
-因此，为了理解情景分析背后的思想, 本文给出了渐进对冲算法的简单数值计算示例. 同时比较了经典随机规划方法的结果.
+渐进对冲算法是一种用于含有不确定性多周期优化问题的新方法. 于1991年由Rockafellar 和 Wets 首次提出. 在Rockafellar 和 Wets的论文中主要重点放在证明和收敛性分析上, 并没有给出具体的例子. 因此，为了理解情景分析背后的思想, 本文给出了渐进对冲算法的简单数值计算示例. 同时比较了经典随机规划方法的结果.
 
 **Key Words**: Progressive Hedging; Scenario Analysis; Stochastic Optimization.
 
@@ -26,137 +14,70 @@ Therefore, in order to understand the idea behind scenario analysis and PHA very
 
 ## 1. Introduction
 
-Many optimization problems with practical origin incorporate stochastic elements. 
+Many optimization problems with practical origin incorporate stochastic elements. In general it is very difficult to solve stochastic problems. This is due to either the mathematical properties (in particular if the space for stochasticity is infinite) or to the computational burden due to the combinatorial explosion (in the case with discrete stochastic events). Only few specific models can be solved easily, in particular the unconstrained Quadratic-Linear model with normally distributed stochastic elements. For an introduction to the classical material the readers are referred to Jensson (1975) (for a Mathematical Programming approach) and to Bertsekas (1987) (for the Dynamic Programming approach).
 
-很多实际场景中的优化问题含有随机的因素.
-
-In general it is very difficult to solve stochastic problems.
-
-通常求解随机问题是很困难的. 
-
-This is due to either the mathematical properties (in particular if the space for stochasticity is infinite) or to the computational burden due to the combinatorial explosion (in the case with discrete stochastic events).
-
-这是由于数学特性(特别是在随机空间是无限的情况下), 或者是由于组合爆炸(在具有离散随机事件的情况下)所引发的计算负担问题.
-
-Only few specific models can be solved easily, in particular the unconstrained Quadratic-Linear model with normally distributed stochastic elements. 
-
-只有少数特定模型可以轻松求解, 特别是具有正态分布随机元素的无约束二次线性模型.
-
-For an introduction to the classical material the readers are referred to Jensson (1975) (for a Mathematical Programming approach) and to Bertsekas (1987) (for the Dynamic Programming approach). 
-
-对于经典材料的介绍，读者可以参考Jensson(1975)(针对数学编程方法)和Bertsekas(1987)(针对动态编程方法).
+很多实际场景中的优化问题含有随机的因素. 通常求解随机问题是很困难的. 这是由于数学特性(特别是在随机空间是无限的情况下), 或者是由于组合爆炸(在具有离散随机事件的情况下)所引发的计算负担问题. 只有少数特定模型可以轻松求解, 特别是具有正态分布随机元素的无约束二次线性模型. 对于经典材料的介绍，读者可以参考Jensson(1975)(针对数学编程方法)和Bertsekas(1987)(针对动态编程方法).
 
 ------------
 
-Recently, stochastic optimization problems have received renewed interest. 
+Recently, stochastic optimization problems have received renewed interest. One of the promising approaches is based on scenario analysis, which is a stochastic programming technique employing discrete scenarios with known probabilities, usually covering several time periods. Figure 1 shows a scenario tree with eight scenarios. Each of these eight scenarios are shown in Fig. 2. 
 
-最近，随机优化问题重新引起了人们的兴趣.
-
-One of the promising approaches is based on scenario analysis, which is a stochastic programming technique employing discrete scenarios with known probabilities, usually covering several time periods. 
-
-一种有前途的方法是基于情景分析的方法, 这是一种随机规划技术. 情景分析方法中引入了已知概率的离散情景，通常情景中含有多个时间段.
-
-Figure 1 shows a scenario tree with eight scenarios. 
-
-图1显示了一棵含有八个情景的情景树. 该情景树覆盖 $3$ 时间段，每个时间段处的随机变量由两个可取值.
+最近，随机优化问题重新引起了人们的兴趣. 一种有前途的方法是基于情景分析的方法, 这是一种随机规划技术. 情景分析方法中引入了已知概率的离散情景，通常情景中含有多个时间段. 图1显示了一棵含有八个情景的情景树. 该情景树覆盖 $3$ 时间段，每个时间段处的随机变量由两个可取值. 对应的8个情景如图2所示(也就是从根节点到叶子节点的一条路径).
 
 ![Fig1](Fig1.png)
 
-Each of these eight scenarios are shown in Fig. 2. 
 
-对应的8个情景如图2所示(也就是从根节点到叶子节点的一条路径).
+
+
 
 ![image-20200617152647431](C:\Users\杨铭\Desktop\WorkSpace\Github\Papers\Progressive Hedging Algorithm\Fig2.png)
 
 -----------
 
-The Progressive Hedging Algorithm (PHA) is a method to solve scenario problems. 
+The Progressive Hedging Algorithm (PHA) is a method to solve scenario problems. The PHA was first presented in Rockafellar and Wets (1991). Since then this method has been studied in several papers, e.g., Robinson (1991), Dembo (1991), Helgason and Wallace (1991), Wallace and Helgason (1991), and Palsson and Ravn (1993). 
 
-渐进对冲算法是一种求解情景问题的方法.
++ In Helgason and Wallace (1991) it is shown how PHA can be combined with approximate solution of the individual scenario problems, resulting in a computationally effcient algorithm where two individual Lagrangian-based procedures are merged into one. This method is used to study examples from fisheries management.
++ In Wallace and Helgason (1991) the structural properties of the PHA is discussed.
++ In Palsson and Ravn (1993) the PHA is applied to the management of a heat storage. 
 
-The PHA was first presented in Rockafellar and Wets (1991).
+渐进对冲算法是一种求解情景问题的方法. 渐进对冲算法于1991年由 Rockafellar 和 Wets 首次提出. 至此渐进对冲算法为多篇论文所讨论. 例如：Robinson (1991), Dembo (1991), Helgason and Wallace (1991), Wallace and Helgason (1991), and Palsson and Ravn (1993). 
 
-渐进对冲算法于1991年由 Rockafellar 和 Wets 首次提出.
++ 在1991年Helgason和Wallace的论文中描述了渐进对冲算法是如何将各个情景问题的近似解结合起来的，同时提出了一种将两个独立的拉格朗日过程合并起来的有效算法. 所提出的方法被应用于渔业管理的实例问题中.
 
-Since then this method has been studied in several papers, e.g., Robinson (1991), Dembo (1991), Helgason and Wallace (1991), Wallace and Helgason (1991), and Palsson and Ravn (1993). 
-
-至此渐进对冲算法为多篇论文所讨论. 例如：Robinson (1991), Dembo (1991), Helgason and Wallace (1991), Wallace and Helgason (1991), and Palsson and Ravn (1993). 
-
-In Helgason and Wallace (1991) it is shown how PHA can be combined with approximate solution of the individual scenario problems, resulting in a computationally effcient algorithm where two individual Lagrangian-based procedures are merged into one. 
-
-在1991年Helgason和Wallace的论文中描述了渐进对冲算法是如何将各个情景问题的近似解结合起来的，同时提出了一种将两个独立的拉格朗日过程合并起来的有效算法.
-
-This method is used to study examples from fisheries management. 
-
-所提出的方法被应用于渔业管理的实例问题中.
-
-In Wallace and Helgason (1991) the structural properties of the PHA is discussed. 
-
-在1991年Wallace和Helgason的论文中讨论了渐进对冲算法的结构属性.
-
-In Palsson and Ravn (1993) the PHA is applied to the management of a heat storage.
-
-在1993年Palsson和Ravn的论文中，渐进对冲算法被应用到热存储管理.
++ 在1991年Wallace和Helgason的论文中讨论了渐进对冲算法的结构属性.
++ 在1993年Palsson和Ravn的论文中，渐进对冲算法被应用到热存储管理.
 
 --------
 
-The purpose of this paper is to give an easy introduction to the PHA. 
+The purpose of this paper is to give an easy introduction to the PHA. The paper starts with the description of the scenario analysis in connection with the decision problem. Then the PHA and some definitions needed are given, simple numerical examples are studied, and finally some concluding remarks are given.
 
-本论文的目的是为渐进对冲算法做一个简单的介绍.
-
-The paper starts with the description of the scenario analysis in connection with the decision problem. 
-
-本文从描述与决策问题有关的情景分析开始.
-
-Then the PHA and some definitions needed are given, simple numerical examples are studied, and finally some concluding remarks are given.
-
-然后给出了与渐进对冲算法和与算法相关的定义；其后给出了一个简单数值计算的例子；最后给出一些结论. 
+本论文的目的是为渐进对冲算法做一个简单的介绍. 本文从描述与决策问题有关的情景分析开始. 然后给出了与渐进对冲算法和与算法相关的定义；其后给出了一个简单数值计算的例子；最后给出一些结论. 
 
 ------
 
 ## 2. Scenario Analysis
 
-The present paper considers decision problems that are sequential in nature.
+The present paper considers decision problems that are sequential in nature. This means that the decision vector $X\in\mathbb{R}^n$ is departed: $X=(x_{1}',x_{2}',\dots,x_{T}')'$. Thus, there are $T$ stages and each stage $t$ one decision $x_t$ must be made, first $x_{1}$, than $x_2$, etc. A sequence of decisions is called a policy.
 
-本文本质上讨论的是一个序列决策问题.
-
-This means that the decision vector $X\in\mathbb{R}^n$ is departed: $X=(x_{1}',x_{2}',\dots,x_{T}')'$.
-
-Thus, there are $T$ stages and each stage $t$ one decision $x_t$ must be made, first $x_{1}$, than $x_2$, etc.
-
-因此，在含有 $T$ 阶段(或周期) 以及每个阶段(周期) $t$ 必须做一个决策 $x_t$，首先是 $x_1$，然后 $x_2$，等等.
-
-A sequence of decisions is called a policy.
-
-一个决策序列称为一种策略.
+【**决策序列**】本文本质上讨论的是一个序列决策问题. 这意味着决策向量 $X\in\mathbb{R}^n$ 对应于：$X=(x_{1}',x_{2}',\dots,x_{T}')'$. 因此，在含有 $T$ 阶段(或周期) 以及每个阶段(周期) $t$ 必须做一个决策 $x_t$，首先是 $x_1$，然后 $x_2$，等等. 一个决策序列称为一种策略.
 
 ----------
 
-The information structure is also sequential. 
+The information structure is also sequential. Thus, each time a decision is made some information is gained. 
 
-信息的结构也是序列化的.
-
-Thus, each time a decision is made some information is gained.
-
-因此, 在每个周期做完决策后，便会反馈一些信息. 
+【**决策反馈的信息序列**】信息的结构也是序列化的. 因此, 在每个周期做完决策后，便会反馈一些信息. 
 
 -----------
 
-The information structure is described by scenarios.
+The information structure is described by scenarios. The uncertainty about parameters or components of the system is modeled by a small number of subproblems. Each version is called a *scenario*. The set of scenarios is denoted by $S$.
 
-信息的结构通过情景来描述. 
+信息的结构通过情景来描述. 系统参数或组件(例如，需求)的不确定性由少量的子问题(或情景)来建模表达. 每个子问题被称作一个情景. 所有情景构成的集合表示为 $S$.
 
-The uncertainty about parameters or components of the system is modeled by a small number of subproblems. 
+【假设没有不确定性，则反馈信息就是一个序列】
 
-系统参数或组件(例如，需求)的不确定性由少量的子问题(或情景)来建模表达.
+【假设引入不确定性，则反馈信息就是一棵树，从根节点到叶子节点即为一个序列，对应一个子问题，一个情景】
 
-Each version is called a *scenario*. 
-
-每个子问题被称作一个情景.
-
-The set of scenarios is denoted by $S$.
-
-所有情景构成的集合表示为 $S$.
+【情景分析只存在于有不确定性的问题场景下】
 
 ------------------
 
@@ -168,33 +89,14 @@ $$
 p_s > 0, &\sum\limits_{s\in S}{p_{s}}=1 &(1)
 \end{align*}
 $$
-Eight scenarios are indicated in Fig. 1. 
+Eight scenarios are indicated in Fig. 1. The sequential nature of the problem is indicated by the sequence of stages $t=1$, $t=2$ and $t=3$. Thus, $x_t$ must be chosen three times. Information is also gained three times, after a decision is made. Thus, at the time $x_1$ must be chosen, it is not known which of the eight scenarios, $s_1,\dots,s_{8}$, will take place. The choice of must be made, and then the state will be in one of the two points $A$ or $B$. If the actual scenario was $s_1$, $s_2$, $s_3$ or $s_4$ the state will be in $A$, if the actual scenario was $s_5,s_6,s_7$ or $s_8$ the state with be in $B$.
 
-在图1中标定了 8 个情景.
+在图1中标定了 8 个情景. 子问题(或情景)的序列特性由阶段 $t=1$, $t=2$ 和 $t=3$ 的顺序来表示. 因此，决策 $x_t$ 必须做3次. 则信息也会反馈3次. 因此，当决策选择 $x_1$ 时，我们是无法判断 8 种情景 $s_1,\dots,s_8$ 那种情景会发生. 必须做出选择，然后状态为 $A$ 或 $B$ 中的一个. 如果实际情景 $s_1,s_2,s_3,s_4$ 的状态属于 $A$, 如果实际情景 $s_5,s_6,s_7,s_8$ 的状态属于 $B$.
 
-The sequential nature of the problem is indicated by the sequence of stages $t=1$, $t=2$ and $t=3$. 
+<img src="Fig1.png" alt="Fig1" style="zoom:33%;" />
 
-子问题(或情景)的序列特性由阶段 $t=1$, $t=2$ 和 $t=3$ 的顺序来表示.
-
-Thus, $x_t$ must be chosen three times.
-
-因此，决策 $x_t$ 必须做3次. 
-
-Information is also gained three times, after a decision is made. 
-
-则信息也会反馈3次
-
-Thus, at the time $x_1$ must be chosen, it is not known which of the eight scenarios, $s_1,\dots,s_{8}$, will take place.
-
-因此，当决策选择 $x_1$ 时，我们是无法判断 8 种情景 $s_1,\dots,s_8$ 那种情景会发生.
-
-The choice of must be made, and then the state will be in one of the two points $A$ or $B$.
-
-必须做出选择，然后状态为 $A$ 或 $B$ 中的一个. 
-
-If the actual scenario was $s_1$, $s_2$, $s_3$ or $s_4$ the state will be in $A$, if the actual scenario was $s_5,s_6,s_7$ or $s_8$ the state with be in $B$.
-
-如果实际情景 $s_1,s_2,s_3,s_4$ 的状态属于 $A$, 如果实际情景 $s_5,s_6,s_7,s_8$ 的状态属于 $B$.
++ 每个情景的序列长度为 3（或者说是状态长度为3的序列），也就是说要实现一个情景需要做出3次决策，获得3次反馈.
++ 当 $x_1$ 时，可以看出我们是无法知道 $s_1,s_2,\dots,s_8$ 中的那个情景会发生. 这时必须做出选择，产生状态 $A$ 或者 $B$. 其中沿着状态 $A$ 发展可能产生 $s_1,s_2,s_3,s_4$, 沿着状态 $B$ 发展可能产生 $s_5,s_6,s_7,s_8$.
 
 ------------
 
@@ -202,67 +104,49 @@ It is assumed that after $x_1$ is chosen it can be observed, whether the state i
 
 假设在决策 $x_1$ 选择后，状态是可观察的，即属于 $A$ 或 $B$ 是可知的，因此便获得了新的信息.
 
+【当做出决策 $x_1$ 时，状态依概率观察到 $A$ 或 $B$】
+
 ----------
 
 Now $x_2$ must be chosen, and then the state will end up in $C$ or $D$ (if the state is in $A$) or $E$ or $F$ (if the state is in $B$), and so on. 
 
 现在决策 $x_2$ 必须做出选择，其后的状态将会出现 $C$ 或 $D$ (如果决策 $x_2$ 之前的状态为 $A$ 的话)，或者将会出现 $E$ 或 $F$ (如果决策 $x_2$ 之前的状态为 $B$ 的话)，以此类推.
 
+【当做出决策 $x_2$ 时，状态依概率观察到 $C,D,E,F$】
+
 -----------
 
-This decision process has two kinds of requirement to the choice of $x_t$ at each stage. 
+This decision process has two kinds of requirement to the choice of $x_t$ at each stage. First, there is the requirement that $x_t$ must be admissible. This means that $x_t$ must be chosen from some set $C_s$.
 
-该决策过程在每个阶段对 $x_t$ 的选择有两类要求.
+该决策过程在每个阶段对 $x_t$ 的选择有两类要求. 首先， 要求 $x_t$ 必须是 admissible. 意思是 $x_t$ 必须来自于某个集合 $C_s$ 
 
-First, there is the requirement that $x_t$ must be admissible.
-
-首先， 要求 $x_t$ 必须是 admissible.
-
-This means that $x_t$ must be chosen from some set $C_s$.
-
-意思是 $x_t$ 必须来自于某个集合 $C_s$ 
+【$x_t$ 必须是 admissible，即 $x_t$ 必须来自于集合 $C_s$】
 
 ----------
 
-Second there is the requirement that $x_t$ be *implementable*. 
+Second there is the requirement that $x_t$ be *implementable*. This refers to the information structure. Thus, when $x_t$ is chosen at stage $t$ only the knowledge which has been gained until then is available.
 
-第二，要求 $x_t$ 必须是 implementable.
+第二，要求 $x_t$ 必须是 implementable. 这指的是信息的结构. 因此，当阶段 $t$ 选择 $x_t$ 时，只有在那之前获得的知识才可用.
 
-This refers to the information structure.
-
-这指的是信息的结构. 
-
-Thus, when $x_t$ is chosen at stage $t$ only the knowledge which has been gained until then is available.
-
-因此，当阶段$t$ 选择 $x_t$ 时，只有在那之前获得的知识才可用.
+【$x_t$ 必须是 implementable，即在做 $x_t$ 只能使用先前的决策阶段产生的决策信息】
 
 ----------
 
-This can be formulated more specifically as follows. 
+This can be formulated more specifically as follows. As seen from Fig. 1 - 2 there are relations between the scenarios.  Thus, at stage $t = 2$ the scenarios fall in two groups: one contains scenarios $s_{1},\dots,s_{4}$, the other scenarios $s_{5},\dots,s_{8}$. Similarly at stage $t = 3$ there are four groups of scenarios, each group with two scenarios.
 
-可以通过如下进行具体地形式化.
+可以通过如下进行具体地形式化. 从图1-2可以看出，情景之间存在关联. 因此，在阶段 $t=2$ 时，情景集中的情景划分为了两组：一组包含情景 $s_1,\dots,s_4$，另一组包含情景 $s_5,\dots,s_8$. 类似地，在阶段 $t=3$ 时，有4个情景组，每个情景组中含有两个情景.
 
-As seen from Fig. 1 - 2 there are relations between the scenarios. 
+【情景之间的关联是通过中间反馈的状态信息实现的】
 
-从图1-2可以看出，场景之间存在关联.
+【在阶段 $t=2$ 时，情景集中的情景因为状态被划分为两组：状态 $A$ (沿着状态 $A$ 可以出现情景 $s_1,s_2,s_3,s_4$)，状态 $B$ (沿着状态 $B$ 可以出现情景 $s_5,s_6,s_7,s_8$).】
 
-Thus, at stage $t = 2$ the scenarios fall in two groups: one contains scenarios $s_{1},\dots,s_{4}$, the other scenarios $s_{5},\dots,s_{8}$. 
-
-因此，在阶段 $t=2$ 时，情景集中的情景划分为了两组：一组包含情景 $s_1,\dots,s_4$，另一组包含情景 $s_5,\dots,s_8$.
-
-Similarly at stage $t = 3$ there are four groups of scenarios, each group with two scenarios. 
-
-类似地，在阶段 $t=3$ 时，有4个情景组，每个情景组中含有两个情景.
+【在阶段 $t=3$ 时，情景集中的情景因为状态被划分为两组：状态 $C$ (沿着状态 $C$ 可以出现情景 $s_1,s_2$)，状态 $D$ (沿着状态 $D$ 可以出现情景 $s_3,s_4$)，状态 $E$ (沿着状态 $E$ 可以出现情景 $s_5,s_6$)，状态 $F$ (沿着状态 $F$ 可以出现情景 $s_7,s_8$).】
 
 ----------
 
-Such a group is denoted as a *scenario bundle*. 
+Such a group is denoted as a *scenario bundle*. As seen, the scenario bundles at time $t$ are such that the scenarios in each bundle are observationally indistinguishable at time $t$.
 
-一个情景组表示为一个 scenario bundle.
-
-As seen, the scenario bundles at time $t$ are such that the scenarios in each bundle are observationally indistinguishable at time $t$.
-
-诚如所见，在时间点 $t$ 时的 scenario bundles 
+一个情景组(或者中间状态(中间状态可能产生一组情景))表示为一个 scenario bundle. 诚如所见，在时间点 $t$ 时的 scenario bundles.
 
 ------------
 
@@ -276,27 +160,15 @@ Therefore, the requirement of implementability can now be stated as follows:
 
 -----
 
-At any time $t$, it is known what scenario bundle is relevant for the decision. 
+At any time $t$, it is known what scenario bundle is relevant for the decision. Thus, at stage $t = 2$ on Fig. 1 it is known if the relevant scenario bundle contains $s_{1},\dots,s_{4}$ (this is the case if the state is at $A$) or $s_5,\dots,s_8$, (if the state is at $B$).
 
-在任何时刻 $t$，都知道哪个 scenario bundle 与 $x_t$ 相关.
-
-Thus, at stage $t = 2$ on Fig. 1 it is known if the relevant scenario bundle contains $s_{1},\dots,s_{4}$ (this is the case if the state is at $A$) or $s_5,\dots,s_8$, (if the state is at $B$).
-
-因此，在图1的阶段 $t=2$，知道相关scenario bundle是否包含 $s_{1},\dots,s_{4}$ (如果状态为 $A$，就是这种情况) 或 $s_5,\dots,s_8$ (如果状态为 $B$).
+在任何时刻 $t$，都知道哪个 scenario bundle 与 $x_t$ 相关. 因此，在图1的阶段 $t=2$，知道相关scenario bundle是否包含 $s_{1},\dots,s_{4}$ (如果状态为 $A$，就是这种情况) 或 $s_5,\dots,s_8$ (如果状态为 $B$).
 
 ------------------------------
 
-The decision problem can now be formulated as follows. 
+The decision problem can now be formulated as follows. There is a sequential decision and information gaining process, defined by scenarios $s\in S$ with probabilities $p_s$, see Eq. (1). To each decision $X \in \mathcal{R}^n$ and each scenario $s \in S$ there is a constant set $C_s$ and an objective function value $f_{s}(X(s))$ can be calculated. 
 
-决策问题现在可以形式化为如下.
-
-There is a sequential decision and information gaining process, defined by scenarios $s\in S$ with probabilities $p_s$, see Eq. (1). 
-
-有一个序列决策和信息获取过程，其中信息的获取过程由情景 $s\in S$ 和情景概率 $p_s$ 定义，请参见 Eq. (1).
-
-To each decision $X \in \mathcal{R}^n$ and each scenario $s \in S$ there is a constant set $C_s$ and an objective function value $f_{s}(X(s))$ can be calculated. 
-
-对于每个决策 $X\in \mathcal{R}^n$ 和每个情景 $s\in S$，都有一个常数集 $C_s$ 和一个目标函数值 $f_{s}(X(s))$ 可以被计算.
+决策问题现在可以形式化为如下. 有一个序列决策和信息获取过程，其中信息的获取过程由情景 $s\in S$ 和情景概率 $p_s$ 定义，请参见 Eq. (1). 对于每个决策 $X\in \mathcal{R}^n$ 和每个情景 $s\in S$，都有一个常数集 $\mathcal{C}_s$ 和一个目标函数值 $f_{s}(X(s))$ 可以被计算.
 
 -----------
 
@@ -325,15 +197,31 @@ $$
 \end{align*}
 $$
 
+**信息**：
+
++ 情景集 $S$
++ 情景概率 $p_s$
+
+**决策**：
+
++ 决策向量 $X \in \mathcal{R}^n$
+
+**信息与决策之间的关联**：
+
++ **成本**：
+  + $f_s(X(s))$ : 在情景 $s$ 下做出决策 $X(s)$ 对应的成本
+  + $\sum\limits_{s\in S}{p_sf_s(X(s))}$：所以所有可能情景下的期望成本
+  + $\min\sum\limits_{s\in S}{p_sf_s(X(s))}$：优化目标就是最小化所有可能情景下的期望成本
++ **约束**：
+  + 情景 $s$ 对应的决策向量表示为 $X(s)$，其中 $X(s)\in \mathcal{C}_s$，$\mathcal{C}_s$ 是一个常数集，理解为在情景 $s$ 下，决策序列的取值范围
+  + $X(s)$ 必须是 *implementable*，也就是说构造 $X(s)$ 是要考虑不同情景，在不同时间阶段状态之间的关系，即状态对应的情景子集中情景之间在不同时间状态之间的等式关系. 这种等式关系本质上描述的就是情景树的结构.
+
 ------------
 
-This problem is diffcult to solve in general. 
+This problem is diffcult to solve in general. The algorithm described below is based on the assumption that if it is known which scenario $s\in S$ is relevant then the optimal solution to this deterministic problem:
 
-该问题通常难以求解.
+该问题通常难以求解. 下面描述的算法基于以下假设：如果知道哪个情景 $s\in S$是相关的，则此确定性问题的最优解：
 
-The algorithm described below is based on the assumption that if it is known which scenario $s\in S$ is relevant then the optimal solution to this deterministic problem:
-
-下面描述的算法基于以下假设：如果知道哪个情景 $s\in S$是相关的，则此确定性问题的最优解：
 $$
 \begin{align*}
 &\min{f_{s}(X(s))} &(5) \\
@@ -343,6 +231,17 @@ $$
 is easily found for any $s\in S$.
 
 很容易找到 $S$ 中的任何$s$.
+
++ 假设确切的知道某种情景会发生，也就是情景集中只有一个情景 $s$，即$p_s=1$ 则目标函数可做如下简化：
+
+$$
+\min\sum\limits_{s\in S}{p_sf_s(X(s))} \Rightarrow \min{f_s(X(s))} \\
+X(s) \in C_s
+$$
+
++ 由于只有一个情景 $s$，所以也就不存在要满足 *implementable* 的约束了
++ 在这种情况下，使得问题给好求解. 
++ <font color=red>**上述过程是否可以理解成松弛化？**</font>
 
 ------------
 
@@ -357,7 +256,7 @@ $$
 $$
 for any $s\in S$. In Eqs. (7) - (8) $\hat{X}$ is a given value in $\mathbb{R}^n$, $W$ is a given value in $\mathbb{R}^n$, $X'W$ is the scalar product of $X$ and $W$, $r\in \mathbb{R}$，$r>0$，and $||\cdot||$ is the Euclidean norm.
 
-对于任何 $s\in S$. 在等式(7)-(8) ：
+对于任何 $s\in S$. 在等式 (7) - (8) ：
 
 + $\hat{X}$ 是在 $\mathbb{R}^n$ 中的给定值
 + $W$ 是在 $\mathbb{R}^n$
@@ -370,6 +269,28 @@ for any $s\in S$. In Eqs. (7) - (8) $\hat{X}$ is a given value in $\mathbb{R}^n$
 The relation between the problems in Eqs. (5) - (6) and in Eqs. (7) - (8) may be interpreted as follows. 
 
 在等式(5)-(6)中问题和在等式(7)-(8)中问题之间的关系可做如下解释.
+$$
+\left\{
+	\begin{aligned}
+	&\min{f_{s}(X(s))} &(5) \\
+	&X(s)\in C_{s} &(6)
+\end{aligned}
+\right.
+\Longrightarrow
+\left\{
+	\begin{aligned}
+	&\min{f_s(X(s)) + X'(s)W + \frac{1}{2}r||X(s)-\hat{X}||^{2}} &(7) \\
+	&X(s)\in C_{s} &(8)
+\end{aligned}
+\right.
+$$
+在等式 (5) - (6) 中，由于是在确定性情景下定义的，也就不包含对 $X(s)$ 的 *implementable*. 尽管做了松弛化，但 *implementable* 的约束还是要想办法加进来的. 而恰好 *implementable* 均为等式约束.
+
+等式 (7) 是增广拉格朗日函数,  其中：
+
++ $X'(s)$ 即为 *implementable* 约束函数
++ $W$ 即为拉格朗日乘子
++ $\frac{1}{2}r||X(s)-\hat{X}||^{2}$ 为惩罚项
 
 ------------------
 
@@ -382,23 +303,17 @@ $$
 \end{align*}
 $$
 
+关于 *implemetable* 约束，可以表达为在每个scenario bundle中的情景 $s$，在时间段 $t$ 应该具有到时刻 $t$ 为止相同的决策. 这个相同的决策定义为 scenario bundle 中情景 $s$ 到时间段 $t$ 为止决策序列的概率加权的平均. 可以看作一个条件期望(前提是$p_s$ 与 $X_t(s)$ 是相互独立的). 根据定义有 $\hat{X}_{t}(A)=X_{t}(s)$ ，所以 $\hat{X}_t$ 是 implementable 的.另外 $X_t(s)$ 是等式 (7) - (8) 的解.
+
+补：$E(X_{t}|A)=\sum\limits_{X_t\in C_s}{X_t P(X_t|A)}=\sum\limits_{X_t\in C_s}{X_t \frac{P(X_t,A)}{P(A)}}=\sum\limits_{X_t\in C_s}{X_t}\frac{\sum\limits_{s\in A}{p_s X_{t}(s)}}{\sum\limits_{s\in A}{p_s}}$
+
+$\frac{P(X_t(A),A)}{P(A)}=\frac{\sum\limits_{s\in A}{p_sX_t(s)}}{\sum\limits_{s\in A}{p_s}}$
+
 ------------
 
-In this, the summation are over the scenarios in the relevant bundle, and $X_t(s)$ is the solution at time $t$ to a problem like Eqs. (7) - (8). 
+In this, the summation are over the scenarios in the relevant bundle, and $X_t(s)$ is the solution at time $t$ to a problem like Eqs. (7) - (8). It is seen that $\hat{X}_{t}$ in Eq. (9) can be interpreted as a conditional expectation, relative to the relevant scenario bundle, i.e., relative to the information available. It is also observed that by this definition $\hat{X}_t$ is implementable. Moreover, if $C_s$ is convex and independent of the particular scenario in the bundle, then $\hat{X}_t$ is admissible.
 
-在这种情况下, 求和是在相关bundle中的scenarios上进行的, 并且 $X_t(s)$ 是时间点 $t$ 出对问题等式(7)-(8)的解.
-
-It is seen that $\hat{X}_{t}$ in Eq. (9) can be interpreted as a conditional expectation, relative to the relevant scenario bundle, i.e., relative to the information available. 
-
-可以看出, 等式(9) 中的 $\hat{X}_{t}$ 可以解释为相对于相关scenario bundle(即相对于可用信息)的一个条件期望.
-
-It is also observed that by this definition $\hat{X}_t$ is implementable. 
-
-还观察到，通过该定义，$\hat{X}_t$ 是implementable.
-
-Moreover, if $C_s$ is convex and independent of the particular scenario in the bundle, then $\hat{X}_t$ is admissible. 
-
-而且，如果 $C_s$ 是凸的并且独立于bundle中的特定scenario，则 $\hat{X}_t$ 是admissible.
+在这种情况下, 求和是在相关bundle中的scenarios上进行的, 并且 $X_t(s)$ 是时间点 $t$ 处对问题等式(7)-(8)的解. 可以看出, 等式(9) 中的 $\hat{X}_{t}$ 可以解释为相对于相关scenario bundle(即相对于可用信息)的一个条件期望. 还观察到，通过该定义，$\hat{X}_t$ 是implementable. 而且，如果 $C_s$ 是凸的并且独立于bundle中的特定scenario，则 $\hat{X}_t$ 是admissible.
 
 -----------------------
 
@@ -879,15 +794,322 @@ This is illustrated in Fig. 4 - 6.
 
 ### 4.2 Example 2
 
+The problem is now to find
+$$
+\begin{align*}
+&\min\limits_{x}{E\Big[\sum\limits_{t=1}^{3}\Big\{\frac{1}{2}(x_{t}-x_{t-1})^2 + (x_{t}-d_{t})^2\Big\}\Big]} &(19)
+\end{align*}
+$$
+subject to the constraints
+$$
+\begin{align*}
+&3 \leq x_{t} \leq 6, &1\leq t \leq T &&(20)
+\end{align*}
+$$
+$d$ and $p$ take the values shown in Fig. 7. $x_0=4$ and $T$ is equal to two or three, i.e., $T=2$  for scenarios $s_1$ to $s_4$ and $T = 3$ for scenarios $s_5$ and $s_6$. This problem 1 there is one scenario bundle is sequential. It is observed that at time $t = 1$ there are two bundles, the bundle containing all 6 scenarios. At time $t=2$  containing $s_1$, $s_2$ and $s_3$, and the bundle containing $s_4$, $s_5$ and $s_6$. At time $t = 3$ there are $5$ bundles, $4$ of them are "empty", and the last one contains the two scenarios $s_5$ and $s_6$.  
+
+Clearly this example is more complex than Example 1, therefore, not all intermediate results will be shown. 
+
+![Fig7.png](Fig7.png)
+
 #### 4.2.1 PHA
+
+First the optimal solutions to the given scenario subproblems are found and the price system is set to zero. This is shown in Table 3. In this example $r$ is chosen equal to 1. 
+
++ $\nu = 0$
+
+  + **STEP 1** 
+
+    The conditional expectations for the four decision states, labeled I, Il, Ill, and IV in Fig. 7 are obtained from data in Tables 3 and 4 
+    $$
+    \begin{align*}
+    \hat{X}_{I}^{0}&=0.06 * 4.91 + 0.15 * 4.73 + 0.09 * 4.25 \\
+    &+0.42 * 3.00 + 0.028 * 3.46 + 0.252 * 3.37 = 3.59 \\
+    \hat{X}_{II}^{0}&=0.20 * 5.64 + 0.50 * 4.91 + 0.30 * 3.00 = 4.48 \\
+    \hat{X}_{III}^{0}&=0.60 * 3.67 + 0.04 * 5.85 + 0.36 * 5.46 = 4.40 \\
+    \hat{X}_{IV}^{0}&=0.10 * 5.95 + 0.90 * 4.49 = 4.63
+    \end{align*}
+    $$
+
+    |  $$S$$  |              | $$X^{0}(s)$$ |      |      | $$W^{0}(s)$$ |      |
+    | :-----: | :----------: | :----------: | :--: | :--: | :----------: | :--: |
+    |         |     t=1      |     t=2      | t=3  | t=1  |     t=2      | t=3  |
+    | $$s_1$$ |     4.91     |     5.64     |      | 0.0  |     0.0      |      |
+    | $$s_2$$ |     4.73     |     4.91     |      | 0.0  |     0.0      |      |
+    | $$s_3$$ |     4.25     | $$3.00^{*}$$ |      | 0.0  |     0.0      |      |
+    | $$s_4$$ | $$3.00^{*}$$ |     3.67     |      | 0.0  |     0.0      |      |
+    | $$s_5$$ |     3.46     |     5.85     | 5.95 | 0.0  |     0.0      | 0.0  |
+    | $$s_6$$ |     3.37     |     5.46     | 4.49 | 0.0  |     0.0      | 0.0  |
+
+    Table 3 Initail solutions. * means that the solution lies on the lower boundary.
+
+    |  $$S$$  |       | $$p(s)$$ |      |       | $$\hat{X}$$ |        |
+    | :-----: | :---: | :------: | :--: | :---: | :---------: | :----: |
+    |         |  t=1  |   t=2    | t=3  |  t=1  |     t=2     |  t=3   |
+    | $$s_1$$ | 0.06  |   0.20   |      | $$I$$ |   $$II$$    |        |
+    | $$s_2$$ | 0.15  |   0.50   |      | $$I$$ |   $$II$$    |        |
+    | $$s_3$$ | 0.09  |   0.30   |      | $$I$$ |   $$II$$    |        |
+    | $$s_4$$ | 0.42  |   0.60   |      | $$I$$ |   $$III$$   |        |
+    | $$s_5$$ | 0.028 |   0.04   | 0.1  | $$I$$ |   $$III$$   | $$IV$$ |
+    | $$s_6$$ | 0.252 |   0.36   | 0.9  | $$I$$ |   $$III$$   | $$IV$$ |
+
+    Table 4 The probabilities, see also Fig. 7.
+
+  + **STEP 2 & 3**
+
+    As an example, solution of subproblem $s_1$ is found as follows ($x_1=X(s_1)_{t=1}$, $x_2=X(s_1)_{t=2}$, $w_1=W(s_1)_{t=1}$, and $w_2=W(s_1)_{t=2}$)
+    $$
+    \begin{align*}
+    f&=\frac{1}{2}(x_1-x_0)^2 + (x_1-d_1)^2 + \frac{1}{2}(x_2-x_1)^2 + (x_2-d_2)^2 \\
+    &+x_1w_1 + x_2w_2+\frac{1}{2}r(x_1-\hat{X}_{I})^2 + \frac{1}{2}r(x_2-\hat{X}_{II})^2 &(21)
+    \end{align*}
+    $$
+    $\partial{f}/\partial{x_1}=0$ and $\partial{f}/\partial{x_2}=0$ results in
+    $$
+    \begin{align*}
+    (4+r)x_1 - x_2 &= x_0 + 2d_1 - w_{1} + r\hat{X}_{I}& \\
+    -x_1 + (3+r)x_2 &= 2d_2 - w_2 + r\hat{X}_{II} &(22)
+    \end{align*}
+    $$
+    respectively. This can easily be solved, the solutions are $x_1=4.57$ and $5.26$， which also satify Eq. (20).
+
+    The price system is updated as
+    $$
+    \begin{align*}
+    w_{1}^{1}&=w_{1}^{0} + r(x_{1}^{1}-\hat{X}_{I}^{1})=0.0 + 1(4.57-3.54)=1.03 &\\
+    w_{2}^{1}&=w_{2}^{0} + r(x_{2}^{1}-\hat{X}_{II}^{1})=0.0 + 1(5.26-4.37)=0.89 &(23)
+    \end{align*}
+    $$
+    The results for the other subproblems are found in Table 5.
+
+    |  $$S$$  |         | $$X^{1}(s)$$ |         |         | $$W^{1}(s)$$ |         |
+    | :-----: | :-----: | :----------: | :-----: | :-----: | :----------: | :-----: |
+    |         | $$t=1$$ |   $$t=2$$    | $$t=3$$ | $$t=1$$ |   $$t=2$$    | $$t=3$$ |
+    | $$s_1$$ |  4.57   |     5.26     |         |  1.03   |     0.89     |         |
+    | $$s_2$$ |  4.47   |     4.74     |         |  0.93   |     0.37     |         |
+    | $$s_3$$ |  4.15   |     3.16     |         |  0.61   |    -1.21     |         |
+    | $$s_4$$ |  3.09   |     3.85     |         |  -0.45  |    -0.51     |         |
+    | $$s_5$$ |  3.34   |     5.35     |  5.41   |  -0.20  |     0.96     |  0.93   |
+    | $$s_6$$ |  3.30   |     5.14     |  4.37   |  -0.25  |     0.75     |  -0.10  |
+
+    Table 5 $X^{1}(s)$ and $W^{1}(s)$.
+
++ $\nu=5$
+
+  + **STEP 1**
+
+    $\hat{X}_{I}^{5}=3.53,\hat{X}_{II}^{5}=4.16,\hat{X}_{III}^{5}=4.48,\hat{X}_{IV}^{5}=4.29$
+
+  + **STEP 2 & 3**
+
+    $X^{6}(s)$ and $W^{6}(s)$ are shown in Table 6.
+
+    |  $$S$$  |         | $$X^{6}(s)$$ |         |         | $$W^{6}(s)$$ |         |
+    | :-----: | :-----: | :----------: | :-----: | :-----: | :----------: | :-----: |
+    |         | $$t=1$$ |   $$t=2$$    | $$t=3$$ | $$t=1$$ |   $$t=2$$    | $$t=3$$ |
+    | $$s_1$$ |  3.83   |     4.42     |         |  3.08   |     2.62     |         |
+    | $$s_2$$ |  3.84   |     4.27     |         |  2.90   |     1.08     |         |
+    | $$s_3$$ |  3.87   |     3.81     |         |  2.35   |    -3.55     |         |
+    | $$s_4$$ |  3.41   |     4.32     |         |  -1.30  |    -1.57     |         |
+    | $$s_5$$ |  3.36   |     4.72     |  4.57   |  -0.98  |     2.68     |  2.74   |
+    | $$s_6$$ |  3.37   |     4.74     |  4.26   |  -1.01  |     2.32     |  -0.31  |
+
+    Table 6 $X^{6}(s)$ and $W^{6}(s)$.
+
+**Summary**: Table 7 shows the conditional expectations for the four decision stages. It is noted that $\hat{X}_I$, the first decision, converges already after 2 iterations  while the others converges much slower or after approximately 15 iterations. 
+
+Table 7 also shows that the first decision is $3.53$, then if $d_1$ happens to be equal $x_1 = 5$ then the second decision is $4.05$, else it is $4.55$ and finally if $d_1 = 2$ and $d_2 = 7$ then the optimal decision is $4.23$. 
+
+| $$\nu$$ | $$\hat{X}_{I}$$ | $$\hat{X}_{II}$$ | $$\hat{X}_{III}$$ | $$\hat{X}_{IV}$$ |
+| :-----: | :-------------: | :--------------: | :---------------: | :--------------: |
+|    0    |      3.59       |       4.48       |       4.40        |       4.63       |
+|    1    |      3.54       |       4.37       |       4.39        |       4.48       |
+|    2    |      3.53       |       4.29       |       4.41        |       4.40       |
+|    3    |      3.53       |       4.24       |       4.44        |       4.35       |
+|    4    |      3.53       |       4.19       |       4.46        |       4.32       |
+|    5    |      3.53       |       4.16       |       4.48        |       4.29       |
+|   10    |      3.53       |       4.08       |       4.54        |       4.25       |
+|   15    |      3.53       |       4.05       |       4.55        |       4.23       |
+|   20    |      3.53       |       4.05       |       4.55        |       4.23       |
+
+Table 7 The conditional expection, $\hat{X}$, for the four decision stages.
 
 #### 4.2.2 Classical Stochastic Optimization
 
+**Dynamic Programming**: The stochastic problem may be solved by Dynamic Programming as follows.
+
+The expected value at stage $t=3$，stable $IV$ is
+$$
+\begin{align*}
+V(3,IV,x_3,x_2)&=\frac{1}{2}(x_3-x_2)^2 + 0.1(x_3-6)^2 + 0.9(x_3-4)^2 &(24)
+\end{align*}
+$$
+Differentiating and equating to zero gives the optimal $x_3$:
+$$
+\begin{align*}
+\frac{\partial{V}(3,IV,x_3,x_2)}{\partial{x_3}}&=(x_3-x_2)+0.2(x_3-6)+1.8(x_3-4)=0 &(25)
+\end{align*}
+$$
+or
+$$
+\begin{align*}
+x_3&=\frac{x_3}{3} + 2.8 &(26)
+\end{align*}
+$$
+Here and in the sequel Eq. (20) is disregarded, which will be fulfilled. Thus the optimal expected value $V$ is:
+$$
+\begin{align*}
+V(3,IV,x_2)&=\frac{1}{9}[\frac{1}{2}(8.4-2x_2)^2+0.1(x_2-9.6)^2+0.9(x_2-3.6)^2] &(27)
+\end{align*}
+$$
+The expected value at stage $t=2$, state $II$ is
+$$
+\begin{align*}
+V(2,II,x_2,x_1)&=\frac{1}{2}(x_2-x_1)^2 + 0.2(x_2-6)^2 + 0.5(x_2-5)^2 + 0.3(x_2-2)^2 &(28)
+\end{align*}
+$$
+In the same way as before the optimal $x_2$ is:
+$$
+\begin{align*}
+x_2&=\frac{1}{3}[x_1 + 8.6] &(29)
+\end{align*}
+$$
+and the optimal expected value $V$:
+$$
+\begin{align*}
+V(2,II,x_1)&=\frac{1}{9}[\frac{1}{2}(8.6-2x_1)^2 + 0.2(x_1-9.4)^2 + 0.5(x_1-6.4)^2 + 0.3(x_1 + 2.6)^2] &(30)
+\end{align*}
+$$
+The expected value of stage $t=2$, state $III$ is, using optimal decision at stage $t=3$ (see Eq. (27))
+$$
+\begin{align*}
+V(2,III,x_2,x_1)&=\frac{1}{2}(x_2-x_1)^2 + 0.6(x_2-4)^2 + 0.4(x_2-7)^{2} + 0.4V(3,IV,x_2) &(31)
+\end{align*}
+$$
+This gives the optimal $x_2$:
+$$
+\begin{align*}
+x_2&=\frac{1}{9.8}[3x_1+34.56] &(32)
+\end{align*}
+$$
+and the optimal expected value $V$:
+$$
+\begin{align*}
+V(2,III,x_1)&=\frac{1}{9.8^{2}}\Big\{\frac{1}{2}(34.56-6.8x_1)^2 + 0.6(3x_1 - 4.64)^2 + 0.4(x_1-34.04)^2 \\&+0.4\frac{1}{9}\big[\frac{1}{2}(13.2-6x_1)^2 + 0.1(3x_1-59.52)^2 + 0.9(3x_1-0.72)^2 \big] \Big\} &(33)
+\end{align*}
+$$
+Finally, the expected value of stage $t=1$，state $I$ is, using the optimal decision at stage $t=2$ (see Eqs. (30) and (33))
+$$
+\begin{align*}
+V(1,I,x_1)&=\frac{1}{2}(x_1-4)^2 + 0.3(x_1-5)^2 + 0.7(x_1-2)^2 \\
+&+0.3V(2,I,x_1) + 0.7V(2,II,x_1) &(34)
+\end{align*}
+$$
+This gives the optimal $x_1=3.5620$，Eqs. (29) and (32) gives the optimal $x_{2}^{II}=4.0540$ and $x_2^{III}=4.6169$，respectively. Finally $x_{2}^{III}$ and Eq. (26) gives the optimal $x_3=4.3390$.
+
+**Mathematical Programming Method**：An alternative solution to the stochastic problem is as follows.
+
+The expected value is
+$$
+\begin{align*}
+V(x_1,x_2^{II},x_3^{III},x_3)&=\frac{1}{2}(x_1-4)^2+0.3(x_1-5)^2+0.7(x_1-2)^2 \\
+&+0.3\Big[\frac{1}{2}(x_{2}^{II}-x_1)^2 + 0.2(x_2^{II}-6)^2+0.5(x_{2}^{II}-5)^{2} + 0.3(x_{3}^{II}-2)^2\Big] \\
+&+0.7\Big[\frac{1}{2}(x_2^{III}-x_1)^2+0.6(x_{2}^{III}-4)^2+0.4(x_{2}^{III}-7)^2\Big] \\
+&+0.7\cdot 0.4\Big[\frac{1}{2}(x_3-x_{2}^{III})^2+0.1(x_3-6)^2+0.9(x_3-4)^2\Big] &(35)
+\end{align*}
+$$
+
+$$
+\partial{V}/\partial{x_1}=\partial{V}/\partial{x_2^{II}}=\partial{V}/\partial{x_2^{III}}=\partial{V}/\partial{x_3}=0 \text{ gives }\\
+\begin{align*}
+&4.0x_1 &- 0.3x_{2}^{II} &-0.70 x_{2}^{III} &&= 9.8 \\
+-&0.3x_1 &+ 0.9x_{2}^{II}  &&&= 2.58 \\
+-&0.7x_1 &&+2.38x_{2}^{III}  &-0.28x_3&= 7.28 \\
+&&&-0.28x_{2}^{III} &+0.84x_3 &=2.352
+\end{align*} (36)
+$$
+
+respectively. The solutions are easily found as: $x_1=3.5620, x_2^{II}=4.0540, x_{2}^{III}=4.6169$ and $x_3=4.3390$. It is verified that solutions satify Eq. (20). These are exactly the same as before.
+
 #### 4.2.3 Note (Choice of the Penalty Parameter)
 
+It is noted that there are some discrepancies between these optimal solutions and the solutions obtained by the PHA, found in Table 7.
 
+Table 8 compares the PHA solutions for various penalty $r$. In all cases $|\hat{X}^{\nu + 1} - \hat{X}^{\nu}| < 5\cdot 10^{-8}$ at least. It is seen that for decreasing $r$ the solutions get closer to the exact ones. For $r=0.001$ the solutions are almost exactly the same as those obtained by the classical methods.
+
+| $$r$$ | $$\hat{X}_I$$ | $$\hat{X}_{II}$$ | $$\hat{X}_{III}$$ | $$\hat{X}_{IV}$$ |
+| :---: | :-----------: | :--------------: | :---------------: | :--------------: |
+|  1.0  |    3.5304     |      4.0435      |      4.5557       |      4.2281      |
+|  0.1  |    3.5572     |      4.0524      |      4.6079       |      4.3229      |
+| 0.01  |    3.5615     |      4.0538      |      4.6156       |      4.3373      |
+| 0.005 |    3.5618     |      4.0539      |      4.6165       |      4.3381      |
+| 0.001 |    3.5620     |      4.0541      |      4.6168       |      4.3389      |
+
+Table 8 The conditional expection, $\hat{X}$, for the four decision stages.
 
 ## 5 Discussion
 
+It has been demonstrated that the scenario technique is feasible and allows the modeling of stochastic elements. The PHA is explained and illustrated be numerical examples thus it is very easy to understand and implement. The only requirement is that the scenario subproblems, which are deterministic optimization problems, can be solved efficiently.
 
+It will also be clear that the weak part of the PHA is the rate of convergence. The penalty parameter $r$ must be chosen with great case. This further indicates that the number of scenarios should be kept at a reasonable small number.
+
+However, there are no other easy ways. Dynamic Programming and Mathematical Programming have been illustrated (Section 4.2.2). There techniques were easy to apply and the optimal solution were found directly. But the reason for this success was that the inequality constraints were not active. In general these techniques are difficult (or even impossible) to apply in case of constrained problems,
+
+Conclusion: scenario analysis and the PHA may be an attractive alternative to the classical methods.
+
+## A. Appendix
+
++ 决策因子约束：
+
+$$
+\begin{align*}
+&p_s > 0, &\sum\limits_{s\in S}{p_{s}}=1 &(1)
+\end{align*}
+$$
+
++ 原始求解数学表达式：
+  $$
+  \begin{align*}
+  \text{object function:} \\
+  &\min\sum\limits_{s\in S}{p_sf_s(X(s))} &(2) \\
+  \text{subjuct to:}\\
+  &X(s)\in\mathcal{C}_s &(3) \\
+  &X(s) \text{ is implementable} &(4)
+  \end{align*}
+  $$
+
+  + $X(s)$ : 理解为情景 $s$ 到决策序列 $X(s)$ 的映射函数
+    + 某个模型预测6个月的需求序列即为一个场景 $s=[d_1,d_2,d_3,d_4,d_5,d_6]$
+    + $X(s)$ 即为对应需求序列的一个订货决策序列 $X(s)=[x_1,x_2,x_3,x_4,x_5,x_6]$
+  + $f_s(X(s))$：理解为情景 $s$ 所对应决策 $X(s)$ 的代价函数
+    + $f_s(X(s))$：理解为在需求序列 $s=[d_1,d_2,d_3,d_4,d_5,d_6]$ 下，做出订货决策序列 $X(s)=[x_1,x_2,x_3,x_4,x_5,x_6]$ 所产生的成本 $f_s(X(s))$. 成本函数取决于客户业务逻辑与成本结构
+  + $p_s$: 表示情景 $s$ 发生的概率
+    + 可以理解为某个模型产生的需求序列逼近真实需求序列的重要程度.
+  + $\min\sum\limits_{s\in S}{p_sf_s(X(s))}$：表示找到让情景集 $S$ 中所有情景的期望成本最小的决策 $X$
+    + $\sum\limits_{s\in S}{p_sf_s(X(s))}$:多个模型产生的需求预测序列 $s$ 在策略 $X$ 下产生订货决策 $X(s)$ 所产生成本的带权期望
+    + 优化目标是找到最优订货策略，使得在已知多个模型需求预测序列的条件下，期望订货成本最小.
+  + $X(s) \in \mathcal{C}_s$: 的含义是在场景 $s$ 下，每个决策时间点的决策值 $X_t(s) \in \mathcal{C_t}(s)$
+    + 将 $X_t(s)$ 想象成在已知情景 $s$ (某个模型产生的预测序列)，$t$ 时刻的订货决策是 $x_t$ 的取值范围
+
+  不好求解，先不考虑情景 $s$ 之间的相互关系，只看单情景(也就是确定情景)下的数学形式：
+
+$$
+\begin{align*}
+&\min{f_{s}(X(s))} &(5) \\
+&X(s)\in C_{s} &(6)
+\end{align*}
+$$
+
++ 通过增广拉格朗日乘数法，将约束条件添加到目标函数中，数学形式变为：
+
+$$
+\begin{align*}
+&\min{f_s(X(s)) + X'(s)W + \frac{1}{2}r||X(s)-\hat{X}||^{2}} &(7) \\
+&X(s)\in C_{s} &(8)
+\end{align*}
+$$
+
+
+
+[什么叫预测控制和滚动优化](http://blog.sina.com.cn/s/blog_86186c970102wz78.html)
 
